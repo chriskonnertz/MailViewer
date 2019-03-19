@@ -1,0 +1,20 @@
+{
+  "name": "chriskonnertz/mailviewer",
+  "description": "Minimalistic online tool to view a raw email as plain text or HTML",
+  "keywords": ["mail", "view", "tool", "viewer", "email", "helper", "mailviewer"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Chris Konnertz"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+  },
+  "autoload": {
+    "psr-0": {
+      "ChrisKonnertz\\MailViewer": "src/"
+    }
+  },
+  "minimum-stability": "dev"
+}
