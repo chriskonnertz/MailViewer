@@ -45,7 +45,7 @@
                     $mail = quoted_printable_decode($raw);
 
                     // Use a regular expression to find the boundary property and to read its value
-                    $success = preg_match('/boundary="=_(\w+)"/', $mail, $matches);
+                    $success = preg_match('/boundary="((?:\w|=)+)"/', $mail, $matches);
                     if ($success !== 1 || empty($matches) || sizeof($matches) != 2) {
                         die('Invalid mail content, could not read "boundary" attribute of the "content-type" property.');
                     }
@@ -63,12 +63,12 @@
                     // Try to find the content blocks of the mail
                     foreach ($lines as $lineNumber => $line) {
                         // Found end of last block
-                        if ($line === '--=_'.$boundary.'--') {
+                        if ($line === '--'.$boundary.'--') {
                             break;
                         }
 
                         // Found start of block
-                        if ($line === '--=_'.$boundary) {
+                        if ($line === '--'.$boundary) {
                             $inBlockContent = false;
                             $inBlockHeader = true;
                         }
