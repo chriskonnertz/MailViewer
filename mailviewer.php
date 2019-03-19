@@ -15,7 +15,26 @@
             .header { padding: 40px; color: white; background: linear-gradient(180deg,#1a74d4,#4ba7e2); font-weight: bold }
             .content { margin: 40px }
             .output { padding: 40px; border: 1px solid #ddd; line-height: 1.2em; box-shadow: 0 2px 20px 1px rgba(22,27,113,.08); }
+            .block > h4 { cursor: pointer }
+            .block > h4 .icon-circle_minus { display: none }
+            .block.closed > h4 .icon-circle_ok { display: none }
+            .block.closed > h4 .icon-circle_minus { display: inline }
+            .block.closed > .output { display: none }
         </style>
+        <script>
+            (function() {
+                document.addEventListener('DOMContentLoaded', function() {
+                    var blocks = document.querySelectorAll('.block');
+                    blocks.forEach(function(block)
+                    {
+                        block.addEventListener('click', function(a,b,c,d,e)
+                       {
+                           this.classList.toggle('closed');
+                       });
+                    });
+                });
+            })();
+        </script>
     </head>
     <body>
         <h1 class="header"><i class="icon-mail_outgoing"></i>&nbsp; Mail Viewer</h1>
@@ -112,12 +131,14 @@
                             $output = htmlspecialchars($output);
                         }
 
-                        echo '<h4>Entry of type <em>'.$contentType.'</em>:</h4>';
+                        echo '<div class="block"><h4><i class="icon-circle_ok"></i><i class="icon-circle_minus"></i> 
+                                Entry of type <em>'.$contentType.'</em>:</h4>';
                         if ($contentType !== 'text/html' || isset($_POST['escape'])) {
                             echo '<pre class="output">'.$output.'</pre>';
                         } else {
                             echo '<div class="output">'.$output.'</div>';
                         }
+                        echo '</div>';
                     }
                 }
             ?>
