@@ -112,7 +112,7 @@
                             $output = htmlspecialchars($output);
                         }
 
-                        echo '<h4>Entry of type '.$contentType.':</h4>';
+                        echo '<h4>Entry of type <em>'.$contentType.'</em>:</h4>';
                         if ($contentType !== 'text/html' || isset($_POST['escape'])) {
                             echo '<pre class="output">'.$output.'</pre>';
                         } else {
