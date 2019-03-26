@@ -20,16 +20,20 @@
             .block.closed > h4 .icon-circle_ok { display: none }
             .block.closed > h4 .icon-circle_minus { display: inline }
             .block.closed > .output { display: none }
+            .block > img.output { max-width: 100% }
+            .block > img.output:hover { max-width: initial }
         </style>
         <script>
             (function() {
+                console.info('Mailviewer started');
                 document.addEventListener('DOMContentLoaded', function() {
-                    var blocks = document.querySelectorAll('.block');
-                    blocks.forEach(function(block)
+                    var headings = document.querySelectorAll('.block > h4');
+                    headings.forEach(function(heading)
                     {
-                        block.addEventListener('click', function(a,b,c,d,e)
+                       heading.addEventListener('click', function()
                        {
-                           this.classList.toggle('closed');
+                           let block = heading.parentElement;
+                           block.classList.toggle('closed');
                        });
                     });
                 });
@@ -50,6 +54,11 @@
                         <input type="checkbox" name="escape" <?php echo isset($_POST['escape']) ? 'checked' : '' ?> />
                         <div></div>
                         <span>Escape HTML tags</span>
+                    </label>
+                    <label class="checkbox">
+                        <input type="checkbox" name="hide_images" <?php echo isset($_POST['hide_images']) ? 'checked' : '' ?> />
+                        <div></div>
+                        <span>Hide images</span>
                     </label>
                 </div>
                 <button class="btn gradient" type="submit"><i class="icon-circle_play"></i> Convert</button>
@@ -115,9 +124,10 @@
                             $blocks[sizeof($blocks) - 1][] = $line;
                         }
 
-                        // An empty line after indicates the end of a block header
+                        // An empty line indicates the end of a block header
                         if ($inBlockHeader && $line === '') {
                             $inBlockContent = true;
+                            $inBlockHeader = false;
                         }
                     }
 
@@ -132,8 +142,10 @@
                         }
 
                         echo '<div class="block"><h4><i class="icon-circle_ok"></i><i class="icon-circle_minus"></i> 
-                                Entry of type <em>'.$contentType.'</em>:</h4>';
-                        if ($contentType !== 'text/html' || isset($_POST['escape'])) {
+                                Entry of type <code>'.$contentType.'</code>:</h4>';
+                        if (strpos($contentType, 'image/') === 0 and ! isset($_POST['hide_images'])) {
+                            echo '<img class="output" src="data:'.$contentType.';base64,'.$output.'" alt="Embedded Image">';
+                        } elseif ($contentType !== 'text/html' || isset($_POST['escape'])) {
                             echo '<pre class="output">'.$output.'</pre>';
                         } else {
                             echo '<div class="output">'.$output.'</div>';
