@@ -68,7 +68,7 @@
 
             <?php
                 if ($raw !== null) {
-                    echo '<h3>Mail Text:</h3>';
+                    echo '<h3>Mail:</h3>';
 
                     $mail = quoted_printable_decode($raw);
 
